@@ -1,7 +1,7 @@
+import { connection } from "@/lib/connect";
 import { AccountLayout, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 const addr = new PublicKey("VTwKNtmXi4TQCLZraksAkasMAJmgLgjVT6txUc4mjxN");
 
 export function GET() {
