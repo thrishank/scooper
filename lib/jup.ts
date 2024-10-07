@@ -8,13 +8,12 @@ const jupiterQuoteApi = createJupiterApiClient();
 
 export async function getQuote(
   inputMint: string,
-  outputMint: string,
   amount: number
 ) {
   // auto slippage w/ minimizeSlippage params
   const params: QuoteGetRequest = {
     inputMint: inputMint,
-    outputMint: outputMint,
+    outputMint: "oreoU2P8bN6jkk3jbaiVxYnG1dCXcYxwhwyK9jSybcp",
     amount: amount,
     autoSlippage: true,
     autoSlippageCollisionUsdValue: 1_000,
