@@ -82,7 +82,11 @@ export async function GET(req: Request) {
 
     const tokenInfoJson = await tokenInfo.json();
 
-    if (tokenInfoJson != null && !ignore.includes(tokenInfoJson.symbol)) {
+    if (
+      tokenInfoJson != null &&
+      !ignore.includes(tokenInfoJson.symbol) &&
+      token.amount != "0"
+    ) {
       tokenData.push({
         data: tokenInfoJson,
         amount: token.amount,

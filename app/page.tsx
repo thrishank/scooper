@@ -17,33 +17,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { connection } from "@/lib/connect";
 import { VersionedTransaction } from "@solana/web3.js";
 import { getQuote, getSwapObj } from "@/lib/jup";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import How from "@/components/home/how";
+import Terms from "@/components/home/pop-up";
+import { Token } from "@/lib/types/token";
+import { formatAmount } from "@/lib/types/fn";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const { connected, publicKey, signAllTransactions } = useWallet();
-
   const [showPopup, setShowPopup] = useState(true);
-
   const [selectedTokens, setSelectedTokens] = useState<
     { address: string; amount: string }[]
   >([]);
-
-  const [tokens, setTokens] = useState<
-    {
-      data: {
-        address: string;
-        name: string;
-        symbol: string;
-        decimals: number;
-        logoURI: string;
-        tags: string[];
-        extensions: {
-          coingeckoId: string;
-        };
-      };
-      amount: string;
-    }[]
-  >();
+  const [tokens, setTokens] = useState<Token[]>();
   const [fetchingTokens, setFetchingTokens] = useState<{
     status: boolean;
     error?: string;
@@ -62,6 +49,7 @@ export default function Home() {
         setTokens(data);
       } catch (e) {
         console.error("Error fetching tokens:", e);
+        toast.error("Error fetching tokens");
         setFetchingTokens({
           status: false,
           error: "error fetching the wallet tokens",
@@ -73,16 +61,7 @@ export default function Home() {
     getTokens();
   }, [connected, publicKey]);
 
-  const formatAmount = (amount: string, decimals: number) => {
-    const num = parseInt(amount) / Math.pow(10, decimals);
-    return num.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 6,
-    });
-  };
-
   const toggleToken = (token: { address: string; amount: string }) => {
-    console.log(selectedTokens);
     setSelectedTokens((prev) =>
       prev.some((t) => t.address === token.address)
         ? prev.filter((t) => t.address !== token.address)
@@ -96,7 +75,8 @@ export default function Home() {
         const quote = await getQuote(token.address, parseInt(token.amount));
         const swap = await getSwapObj(publicKey?.toString()!, quote);
         const swapTransactionBuf = Buffer.from(swap.swapTransaction, "base64");
-        const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+        const transaction =
+          VersionedTransaction.deserialize(swapTransactionBuf);
         setTransactions((prev) => [...(prev || []), transaction]);
       })
     );
@@ -106,15 +86,15 @@ export default function Home() {
   const confirmConvert = async () => {
     if (signAllTransactions) {
       try {
-        console.log(transactions);
         const signedTransactions = await signAllTransactions(transactions!);
         signedTransactions.map(async (tx) => {
           try {
             const signature = await connection.sendRawTransaction(
               tx.serialize()
             );
-            console.log("https://explorer.solana.com/tx/" + signature);
+            toast.success(`Transaction sent: ${signature}`);
           } catch (error) {
+            toast.error("Transaction failed");
             console.error("Transaction failed:", error);
           }
         });
@@ -122,6 +102,7 @@ export default function Home() {
         console.error("Signing transactions failed:", error);
       }
     }
+    setShowConfirmDialog(false);
   };
 
   return (
@@ -132,11 +113,11 @@ export default function Home() {
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
               Ore Coin Converter
             </h1>
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
-              <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600" />
-              </div>
-            </div>
+            <img
+              src="/image.png"
+              alt="Ore Coin Converter Logo"
+              className="w-8 h-8 ml-2"
+            />
           </div>
 
           <WalletMultiButton>
@@ -204,24 +185,6 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="bg-gray-700 rounded-2xl p-4 space-y-2">
-                <h2 className="text-lg font-semibold">Summary:</h2>
-                <div className="flex justify-between items-center">
-                  <span>Selected Tokens:</span>
-                  <span>{selectedTokens.length}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Total Amount:</span>
-                  <span>
-                    {selectedTokens.reduce(
-                      (acc, token) =>
-                        acc + parseFloat(token.amount) / Math.pow(10, 6),
-                      0
-                    )}
-                  </span>
-                </div>
-              </div>
-
               <Button
                 className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 font-bold py-3 rounded-full transition-transform hover:scale-105 disabled:opacity-50"
                 onClick={handleConvert}
@@ -231,27 +194,7 @@ export default function Home() {
               </Button>
             </div>
           )}
-
-          <div className="mt-6 text-sm text-gray-400">
-            <h2 className="text-lg font-semibold text-white mb-2">
-              ORE Scooper
-            </h2>
-            <p className="mb-4">
-              Airdrops and adverts clutter your wallet. This tool allows you to
-              quickly Scoop all your unwanted assets into $ORE via Jupiter
-              swaps.
-            </p>
-
-            <p className="mb-4">
-              <strong>How it works:</strong>
-            </p>
-            <ul className="list-disc list-inside mt-4 space-y-2">
-              <li>Wait for assets to load</li>
-              <li>Select assets for Scooping</li>
-              <li>Review summary</li>
-              <li>Scooper scoops</li>
-            </ul>
-          </div>
+          <How />
         </div>
       </Card>
 
@@ -311,25 +254,7 @@ export default function Home() {
 
       <Dialog open={showPopup} onOpenChange={setShowPopup}>
         <DialogContent className="bg-gray-800 text-white border-2 border-gray-700">
-          <DialogHeader>
-            <DialogTitle>Important Notice</DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="text-gray-300">
-            <ol className="list-decimal list-inside space-y-2">
-              <li>
-                The ore scooper tool is used to facilitate the irreversible
-                burning of your tokens.
-              </li>
-              <li>By using this site, you are doing so at your own risk.</li>
-              <li>
-                By using the platform you explicitly accept full responsibility
-                for any and all swaps. The ore-scooper platform additionally
-                does not assume liability for any mistakes, accidents,
-                miss-intentions or any other actions that led to an undesired
-                burn.
-              </li>
-            </ol>
-          </DialogDescription>
+          <Terms />
           <DialogFooter>
             <Button
               onClick={() => setShowPopup(false)}
@@ -340,6 +265,8 @@ export default function Home() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }
