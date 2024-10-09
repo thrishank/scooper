@@ -1,3 +1,9 @@
+import {
+  DiscordLogoIcon,
+  GitHubLogoIcon,
+  TwitterLogoIcon,
+} from "@radix-ui/react-icons";
+
 export default function How() {
   return (
     <div className="mt-6 text-sm text-gray-400">
@@ -20,6 +26,18 @@ export default function How() {
         <li>Review summary</li>
         <li>Convert to $ORE in a single click</li>
       </ul>
+
+      <div className="flex space-x-4 mt-4">
+        <a href="https://discord.com/invite/4TQfshAAsT" aria-label="Discord">
+          <DiscordLogoIcon className="w-10 h-10 text-gray-400 hover:text-white" />
+        </a>
+        <a href="https://github.com/regolith-labs/ore" aria-label="Twitter">
+          <TwitterLogoIcon className="w-10 h-10 text-gray-400 hover:text-white" />
+        </a>
+        <a href="https://x.com/oresupply" aria-label="Github">
+          <GitHubLogoIcon className="w-10 h-10 text-gray-400 hover:text-white" />
+        </a>
+      </div>
     </div>
   );
 }

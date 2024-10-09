@@ -106,7 +106,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+    <div
+      className="min-h-screen text-white flex items-center justify-center p-4"
+      style={{ backgroundImage: "url(/rock-1-desktop.webp)" }}
+    >
       <Card className="w-full max-w-md bg-gray-800 border-2 border-gray-700 rounded-3xl overflow-hidden">
         <div className="p-6 space-y-6">
           <div className="flex justify-between items-center">
