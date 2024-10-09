@@ -1,7 +1,7 @@
 "use client";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { WalletIcon, X } from "lucide-react";
+import { Loader2, WalletIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -100,6 +100,7 @@ export default function Home() {
         });
       } catch (error) {
         console.error("Signing transactions failed:", error);
+        toast.error("Failed to get the swap transaction via Jupiter");
       }
     }
     setShowConfirmDialog(false);
@@ -240,11 +241,12 @@ export default function Home() {
             <Button
               onClick={() => setShowConfirmDialog(false)}
               variant="outline"
-              className="text-black"
+              className="text-black p-4"
             >
               <X className="mr-2 h-4 w-4" />
               Cancel
             </Button>
+            <div className="p-2"></div>
             <Button
               onClick={confirmConvert}
               className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900"

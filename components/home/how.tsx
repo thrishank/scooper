@@ -31,10 +31,10 @@ export default function How() {
         <a href="https://discord.com/invite/4TQfshAAsT" aria-label="Discord">
           <DiscordLogoIcon className="w-10 h-10 text-gray-400 hover:text-white" />
         </a>
-        <a href="https://github.com/regolith-labs/ore" aria-label="Twitter">
+        <a href="https://x.com/oresupply" aria-label="Twitter">
           <TwitterLogoIcon className="w-10 h-10 text-gray-400 hover:text-white" />
         </a>
-        <a href="https://x.com/oresupply" aria-label="Github">
+        <a href="https://github.com/regolith-labs/ore" aria-label="Github">
           <GitHubLogoIcon className="w-10 h-10 text-gray-400 hover:text-white" />
         </a>
       </div>
