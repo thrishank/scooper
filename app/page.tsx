@@ -115,7 +115,7 @@ export default function Home() {
         <div className="p-6 space-y-6">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
-              Ore Coin Converter
+              Sweep ORE
             </h1>
             <img
               src="/image.png"
