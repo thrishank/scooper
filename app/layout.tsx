@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ORE Scooper",
-  description: "Convert all your unwanted assets into $ORE via Jupiter swaps.",
+  title: "Scooper",
+  description: "Convert all your unwanted assets into $USDC via Jupiter swaps.",
 };
 
 export default function RootLayout({
