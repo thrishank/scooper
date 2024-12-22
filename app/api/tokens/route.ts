@@ -72,7 +72,6 @@ export async function GET(req: Request) {
     "stSOL",
     "scnSOL",
     "LST",
-    "ORE",
   ];
 
   for (const token of tokens) {

@@ -13,7 +13,7 @@ export async function getQuote(
   // auto slippage w/ minimizeSlippage params
   const params: QuoteGetRequest = {
     inputMint: inputMint,
-    outputMint: "oreoU2P8bN6jkk3jbaiVxYnG1dCXcYxwhwyK9jSybcp",
+    outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
     amount: amount,
     autoSlippage: true,
     autoSlippageCollisionUsdValue: 1_000,

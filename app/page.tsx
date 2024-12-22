@@ -65,7 +65,7 @@ export default function Home() {
     setSelectedTokens((prev) =>
       prev.some((t) => t.address === token.address)
         ? prev.filter((t) => t.address !== token.address)
-        : [...prev, token]
+        : [...prev, token],
     );
   };
 
@@ -78,7 +78,7 @@ export default function Home() {
         const transaction =
           VersionedTransaction.deserialize(swapTransactionBuf);
         setTransactions((prev) => [...(prev || []), transaction]);
-      })
+      }),
     );
     setShowConfirmDialog(true);
   };
@@ -90,7 +90,7 @@ export default function Home() {
         signedTransactions.map(async (tx) => {
           try {
             const signature = await connection.sendRawTransaction(
-              tx.serialize()
+              tx.serialize(),
             );
             toast.success(`Transaction sent: ${signature}`);
           } catch (error) {
@@ -115,13 +115,8 @@ export default function Home() {
         <div className="p-6 space-y-6">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
-              Sweep ORE
+              Scooper
             </h1>
-            <img
-              src="/image.png"
-              alt="Ore Coin Converter Logo"
-              className="w-8 h-8 ml-2"
-            />
           </div>
 
           <WalletMultiButton>
@@ -172,7 +167,7 @@ export default function Home() {
                       </span>
                       <Switch
                         checked={selectedTokens.some(
-                          (t) => t.address === token.data.address
+                          (t) => t.address === token.data.address,
                         )}
                         onCheckedChange={() =>
                           toggleToken({
@@ -194,7 +189,7 @@ export default function Home() {
                 onClick={handleConvert}
                 disabled={selectedTokens.length === 0}
               >
-                Convert to Ore
+                Convert to USDC
               </Button>
             </div>
           )}
@@ -214,7 +209,7 @@ export default function Home() {
             <ul className="space-y-2">
               {selectedTokens.map((selectedToken) => {
                 const token = tokens?.find(
-                  (t) => t.data.address === selectedToken.address
+                  (t) => t.data.address === selectedToken.address,
                 );
                 return (
                   <li key={selectedToken.address} className="flex items-center">
@@ -229,7 +224,7 @@ export default function Home() {
                     <span className="ml-2">
                       {formatAmount(
                         selectedToken.amount,
-                        token?.data.decimals || 0
+                        token?.data.decimals || 0,
                       )}
                     </span>
                   </li>
